@@ -19,11 +19,19 @@ $obRouter->get("/sobre", [
 
 ]);
 
-// Rota dinâmica
-$obRouter->get("/pagina/{idPagina}/{acao}", [
-    function ($idPagina, $acao){
-        return new Response(200, "Página" . $idPagina . " - " . $acao);
+// Rota de depoimentos
+$obRouter->get("/depoimentos", [
+    function (){
+        return new Response(200, Pages\Testimony::getTestimonies());
     }
 
 ]);
 
+
+// Rota de depoimentos (INSERT)
+$obRouter->post("/depoimentos", [
+    function ($request){
+        return new Response(200, Pages\Testimony::insertTestimony($request));
+    }
+
+]);

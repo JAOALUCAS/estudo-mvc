@@ -43,7 +43,7 @@ class Router{
     public function __construct($url)
     {
 
-        $this->request = new Request();
+        $this->request = new Request($this);
 
         $this->url = $url;
 
