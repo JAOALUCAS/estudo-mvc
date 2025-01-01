@@ -3,6 +3,7 @@
 namespace App\Models\Entity;
 
 use \App\Db\Database;
+use \PDO;
 
 class Testimony{
 
@@ -64,13 +65,13 @@ class Testimony{
      * @param string $order
      * @param string $limit
      * @param string $fields
-     * @return array
+     * @return PDOStatement
      */
 
      public static function getTestimonies($where = null, $order = null , $limit = null, $fields = "*")
      {
  
-         return (new Database("depoimentos"))->select($where, $order, $limit, $fields);
+        return (new Database("depoimentos"))->select($where, $order, $limit, $fields)->fetchAll(PDO::FETCH_CLASS, self::class);
  
      }
 

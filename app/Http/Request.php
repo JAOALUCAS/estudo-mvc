@@ -104,7 +104,9 @@ class Request{
 
     public function getHttpMethod()
     {
+
         return $this->httpMethod;
+
     }
     
     /**
@@ -114,7 +116,9 @@ class Request{
 
     public function getUri()
     {
+
         return $this->uri;
+
     }
 
     /**
@@ -124,7 +128,9 @@ class Request{
 
     public function getHeaders()
     {
+
         return $this->headers;
+
     }
 
     /**
@@ -134,7 +140,9 @@ class Request{
 
     public function getQuerryParams()
     {
+
         return $this->querryParams;
+
     }
 
     /**
@@ -144,7 +152,9 @@ class Request{
 
     public function getPostVars()
     {
+
         return $this->postVars;
+
     }
 
 }

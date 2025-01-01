@@ -75,6 +75,7 @@ class Router{
 
     private function addRoutes($method, $routes, $params = [])
     {
+
         // Validação dos parâmetros
         foreach($params as $key=>$value)
         {
@@ -89,6 +90,9 @@ class Router{
 
         }
 
+        // Padrão de validação da Url
+        $patternRoutes = "/^" . str_replace("/", "\/", $routes) . "$/";
+ 
         // Váriaveis da rota
         $params["variables"] = [];
 
@@ -103,9 +107,6 @@ class Router{
 
         }
 
-        // Padrão de validação da Url
-        $patternRoutes = "/^" . str_replace("/", "\/", $routes) . "$/";
-
         // Adiciona a rota dentro da classe
         $this->routes[$patternRoutes][$method] = $params;
 
@@ -113,7 +114,6 @@ class Router{
 
     /**
      * Método responsável por definir uma rota de POST
-     *
      * @param string $routes
      * @param array $params
      */
@@ -127,7 +127,6 @@ class Router{
 
      /**
      * Método responsável por definir uma rota de PUT
-     *
      * @param string $routes
      * @param array $params
      */
@@ -141,7 +140,6 @@ class Router{
 
       /**
      * Método responsável por definir uma rota de DELETE
-     *
      * @param string $routes
      * @param array $params
      */
@@ -152,9 +150,9 @@ class Router{
         return $this->addRoutes('DELETE', $routes, $params);
 
     }
+
      /**
      * Método responsável por definir uma rota de GET
-     *
      * @param string $routes
      * @param array $params
      */
@@ -278,6 +276,18 @@ class Router{
             return new Response($e->getCode(), $e->getMessage());
 
         }
+
+    }
+
+    /**
+     * Método responsável por retornar a url atual
+     * @return string
+     */
+
+    public function getCurrentUrl()
+    {
+
+        return $this->url.$this->getUri();
 
     }
 

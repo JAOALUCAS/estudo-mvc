@@ -12,35 +12,35 @@ class Database{
      *  @var string
      */
 
-    const HOST = "localhost";
+     private static $host;
     
     /**
      * Nome do banco
      *  @var string
      */
 
-    const NAME = "database";
+     private static $name;
 
     /**
      * Usuário do banco 
      *  @var string
      */
 
-    const USER = "root";
+     private static $user;
 
     /**
      * Senha do banco de dados
      *  @var string
      */
 
-    const PASS = "";
+     private static $pass;
 
     /**
      * Porta de conexão com o banco de dados
      *  @var string
      */
 
-    const PORT = "3306";
+    private static $port;
 
     /**
      * Nome da tabela a ser manipulada
@@ -55,10 +55,35 @@ class Database{
 
     private $connection;
 
+
+    /**
+     * Método responsável por configurar a classe
+     * @param  string  $host
+     * @param  string  $name
+     * @param  string  $user
+     * @param  string  $pass
+     * @param  integer $port
+    */
+
+    public static function config($host,$name,$user,$pass,$port = 3306){
+
+        self::$host = $host;
+
+        self::$name = $name;
+
+        self::$user = $user;
+
+        self::$pass = $pass;
+
+        self::$port = $port;
+
+    }
+
     /**
      * Define a table e instancia a conexão
      * @param string $table
      */
+
     public function __construct($table = null)
     {
         
@@ -71,21 +96,28 @@ class Database{
     /** 
      * Método responsável por definir a conexão com o banco de dados
     */ 
-    private function setConnection()
+
+    private function setConnection()    
     {
-          
-        try{
 
-            $this->connection = new PDO("mysql:host" . self::HOST. ";dbname:" . self::NAME, self::USER, self::PASS);
-
+        try {
+            
+            // Corrigindo a string de conexão com os delimitadores corretos
+            $dsn = "mysql:host=" . self::$host . ";dbname=" . self::$name . ";port=" . self::$port;
+            
+            // Estabelecendo a conexão
+            $this->connection = new PDO($dsn, self::$user, self::$pass);
+            
+            // Configurando o modo de erro para exceções
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        }catch(PDOException $e){
-
+        } catch (PDOException $e) {
+            
+            // Finalizando em caso de erro
             die("ERROR: " . $e->getMessage());
 
         }
-
+        
     }
 
     /**
@@ -134,7 +166,7 @@ class Database{
         $this->execute($querry, array_values($values));
 
         // Retorna o id inserido 
-        $this->connection->lastInsertId();
+        return $this->connection->lastInsertId();
 
     }
 
@@ -158,7 +190,7 @@ class Database{
         $limit = strlen($limit) ? "LIMIT " . $limit : "";
     
         // Monta a querry
-        $querry = "SELECT ". $fields ." FROM " . $this->table ."";
+        $querry = "SELECT ". $fields ." FROM " . $this->table . " " . $where . " " . $order . " " . $limit;
 
         // Executa a querry
         return $this->execute($querry);

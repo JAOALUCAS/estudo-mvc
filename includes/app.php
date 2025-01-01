@@ -4,6 +4,7 @@ require __DIR__  . "/../vendor/autoload.php";
 
 use \App\Utils\View;
 use \App\Common\Enviroment;
+use \App\Db\Database;
 
 Enviroment::load(__DIR__ . "/../");
 

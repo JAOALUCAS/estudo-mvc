@@ -12,45 +12,42 @@ class Testimony extends Page{
     /**
      * Método responsável por retornar a renderização dos itens de uma página
      * @param Request $request
+     * @param Pagination $obPagination
      * @return string
      */
 
-    private function getTestimonyItens($request)
-    {
-
-        // Depoimentos
-        $itens = "";
-
-        // Quantidade total de registro
-        $quantidadeTotal = EntityTestimony::getTestimonies(null , null, null , "COUNT(*) as qtd")->fetchObject()->qtd;
-
-        // Página atual
-        $querryParams = $request->getQuerryParams();
-
-        $paginaAtual = $querryParams["page"] ?? 1;
-
-        // Instancia de paginação 
-        $obPagination = new Pagination($quantidadeTotal, $paginaAtual, 1);
-
-        // Resultados da página 
-        $results = EntityTestimony::getTestimonies(null , "id DESC", $obPagination->getLimit());
-
-        // Renderiza o item
-        while($obTestimony = $results->fetchObject(EntityTestimony::class))
-        {
-
-            $itens .=  View::render("pages/testimony/item", [
-                "nome" => $obTestimony->nome,
-                "mensagem" => $obTestimony->mensagem,
-                "data" => date("d/m/Y H:i:s", strtotime($obTestimony->data))
-            ]);
-
-        }
-
-        // Retorna os depoimentos 
-        return $itens;
-
-    }
+     private static function getTestimonyItens($request, &$obPagination)
+     {
+         // Depoimentos
+         $itens = "";
+     
+         // Quantidade total de registros
+         $quantidadeTotal = EntityTestimony::getTestimonies(null, null, null, "COUNT(*) as qtd")[0]->qtd;
+     
+         // Página atual
+         $queryParams = $request->getQuerryParams(); 
+     
+         $paginaAtual = $queryParams["page"] ?? 1;
+     
+         // Instancia de paginação 
+         $obPagination = new Pagination($quantidadeTotal, $paginaAtual, 3);
+     
+         // Resultados da página 
+         $results = EntityTestimony::getTestimonies(null, "id DESC", $obPagination->getLimit());
+     
+         // Renderiza o item
+         foreach ($results as $obTestimony) {
+             $itens .= View::render("pages/testimony/item", [
+                 "nome" => $obTestimony->nome,
+                 "mensagem" => $obTestimony->mensagem,
+                 "data" => date("d/m/Y H:i:s", strtotime($obTestimony->data))
+             ]);
+         }
+     
+         // Retorna os depoimentos 
+         return $itens;
+     }
+     
 
     /**
      * Método responsável por retornar o contéudo [view] de depoimentos
@@ -63,7 +60,8 @@ class Testimony extends Page{
 
         //View de depoimentos
         $content =  View::render("pages/testimonies", [
-            "itens" => self::getTestimonyItens($request)
+            "itens" => self::getTestimonyItens($request, $obPagination),
+            "pagination" => parent::getPagination($request, $obPagination)
         ]);
 
         //Retorna a view da página
