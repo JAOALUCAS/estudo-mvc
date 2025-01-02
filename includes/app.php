@@ -5,6 +5,7 @@ require __DIR__  . "/../vendor/autoload.php";
 use \App\Utils\View;
 use \App\Common\Enviroment;
 use \App\Db\Database;
+use \App\Http\Middleware\Queue as MiddlewaresQueue;
 
 Enviroment::load(__DIR__ . "/../");
 
@@ -23,4 +24,15 @@ Database::config(
 // Define o valor padrão das váriaveis
 View::init([
     "URL" => URL
+]);
+
+// Define o mapeamento
+MiddlewaresQueue::setMap([
+    "maintenance" => \App\Http\Middleware\Maintenance::class
+]);
+
+
+// Define o mapeamento de middlewares padrões (todas as rotas)
+MiddlewaresQueue::setDefault([
+    "maintenance"
 ]);

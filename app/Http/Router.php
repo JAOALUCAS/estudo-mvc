@@ -5,6 +5,7 @@ namespace App\Http;
 use \Closure;
 use \Exception;
 use \ReflectionFunction;
+use \App\Http\Middleware\Queue as MiddlewaresQueue;
 
 class Router{
 
@@ -89,6 +90,9 @@ class Router{
             }
 
         }
+
+        // Middlerawares da rota
+        $params["middlewares"] = $params["middlewares"] ?? [];
 
         // Padrão de validação da Url
         $patternRoutes = "/^" . str_replace("/", "\/", $routes) . "$/";
@@ -268,8 +272,8 @@ class Router{
 
             }
 
-            // Retorna a execução da função
-            return call_user_func_array($routes["controller"], $args);
+            // Retorna a execução da fila de middlewares
+            return (new MiddlewaresQueue($routes["middlewares"], $routes["controller"], $args))->next($this->request);
 
         }catch(Exception $e){
 
