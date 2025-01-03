@@ -8,7 +8,6 @@ $obRouter->get("/", [
     function (){
         return new Response(200, Pages\Home::getHome());
     }
-
 ]);
 
 // Rota de sobre

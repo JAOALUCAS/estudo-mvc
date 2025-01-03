@@ -295,4 +295,19 @@ class Router{
 
     }
 
+    /**
+     * Método responsável por rederecionar a url
+     */
+    public function redirect($route)
+    {
+
+        // Url
+        $url = $this->url.$route;
+
+        // Redirect
+        header("location: ".$url);
+        exit;
+
+    }
+    
 }
