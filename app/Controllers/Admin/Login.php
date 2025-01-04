@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Utils\View;
 use App\Models\Entity\User;
 use App\Session\Admin\Login as SessionAdminLogin;
+use App\Controllers\Admin\Alert;
 
 class Login extends Page{
 
@@ -18,9 +19,7 @@ class Login extends Page{
     public static function getLogin($request, $errorMessage = null)
     {
         //Status
-        $status  = !is_null($errorMessage) ? View::render("admin/login/status", [
-            "mensagem" => $errorMessage
-        ]) : "";
+        $status  = !is_null($errorMessage) ? Alert::getSucess($errorMessage) : "";
 
         // Conteúdo da página de login
         $content = View::render("admin/login", [
