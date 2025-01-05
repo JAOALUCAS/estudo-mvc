@@ -96,4 +96,56 @@ class Page{
 
     }
 
+    
+    /**
+     * Método responsável por renderizar o layout de paginação
+     * @param Request $request
+     * @param Pagination $obPagination
+     * @return void
+     */
+
+    public static function getPagination($request, $obPagination)
+    {
+
+        // Páginas
+        $pages = $obPagination->getPages();
+
+        // Verifica a quantidade de páginas
+        if(count($pages) <= 1) return "";
+
+        // Links
+        $links = "";
+
+        // Url atual (sem gets)
+        $url = $request->getRouter()->getCurrentUrl(); 
+
+        // GET
+        $querryParams = $request->getQuerryParams();
+        
+        // Renderiza os links 
+        foreach($pages as $page)
+        {
+
+            // Altera a página
+            $querryParams["page"] = $page["page"];
+
+            // Link
+            $link = $url . "?" . http_build_query($querryParams);
+
+            // View
+            $links .= View::render("admin/pagination/link", [
+                "page"=> $page["page"],
+                "link" => $link,
+                "active" => $page["current"] ? "active" : ""
+            ]);
+
+        }
+
+        // Renderiza a box de paginação
+        return View::render("admin/pagination/box", [
+            "links" => $links
+        ]);
+
+    }
+
 }

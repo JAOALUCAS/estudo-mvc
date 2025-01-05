@@ -36,6 +36,7 @@ class Page{
      * @param Pagination $obPagination
      * @return void
      */
+    
     public static function getPagination($request, $obPagination)
     {
 

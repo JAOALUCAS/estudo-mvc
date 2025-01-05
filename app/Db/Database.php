@@ -197,4 +197,48 @@ class Database{
 
     }
 
+    
+    /**
+     * Método responsável por executar atualizações no banco de dados
+     * @param string $where
+     * @param array $values
+     * @return boolean
+     */
+
+    public function update($where, $values)
+    {
+        // Dados da querry
+        $fields = array_keys($values);
+
+        // Monta a querry
+        $querry = "UPDATE ".$this->table." SET " .implode("=?", $fields)."=? WHERE ".$where;
+
+        // Executar a querry
+        $this->execute($querry, array_values($values));
+
+        // Retorna sucesso
+        return true;
+
+    }
+
+    /**
+     * Método responsável por excluir os dados do banco
+     * @param string $where
+     * @return boolean
+     */
+
+    public function delete($where)
+    {
+        
+        // Monta a querry
+        $querry = "DELETE FROM " .$this->table. " WHERE ". $where;
+
+        // Execita a querry
+        $this->execute($querry);
+
+        // Retorna sucesso
+        return true;
+
+    }
+
 }
