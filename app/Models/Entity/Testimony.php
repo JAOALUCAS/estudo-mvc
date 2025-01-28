@@ -99,9 +99,8 @@ class Testimony{
         return self::getTestimonies("id = ".$id)->fetchObject(self::class);
 
     }
-
     
-     /**
+    /**
      * Método responsável por retornar os depoimentos do banco de dados
      * @param string $where
      * @param string $order
@@ -110,11 +109,11 @@ class Testimony{
      * @return PDOStatement
      */
 
-     public static function getTestimonies($where = null, $order = null , $limit = null, $fields = "*")
-     {
- 
-        return (new Database("depoimentos"))->select($where, $order, $limit, $fields)->fetchAll(PDO::FETCH_CLASS, self::class);
- 
-     }
+    public static function getTestimonies($where = null, $order = null , $limit = null, $fields = "*")
+    {
+
+        return (new Database("depoimentos"))->select($where, $order, $limit, $fields);
+
+    }
 
 }

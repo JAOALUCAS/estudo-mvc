@@ -38,9 +38,17 @@ class Router{
     private $request;
 
     /**
+     * Content Type padrão do response
+     * @var string
+     */
+
+    private $contentType = "text/html"; 
+
+    /**
      * Método respoinsável por iniciar a classe
      * @param string $url
      */
+
     public function __construct($url)
     {
 
@@ -49,6 +57,19 @@ class Router{
         $this->url = $url;
 
         $this->setPrefix();
+
+    }
+
+
+    /**
+     * Método responsável por alterar  o valor do content type
+     * @param string $contentType
+     */
+
+    public function setContentType($contentType)
+    {
+
+        $this->contentType = $contentType;
 
     }
 
@@ -85,7 +106,7 @@ class Router{
 
                 $params["controller"] = $value;
 
-                unset($params[$key]);
+                unset($params[$key]); 
 
             }
 
@@ -95,7 +116,7 @@ class Router{
         $params["middlewares"] = $params["middlewares"] ?? [];
 
         // Padrão de validação da Url
-        $patternRoutes = "/^" . str_replace("/", "\/", $routes) . "$/";
+        $patternRoutes = "/^".str_replace("/", "\/", $routes)."$/";
  
         // Váriaveis da rota
         $params["variables"] = [];
@@ -104,8 +125,8 @@ class Router{
         $patternVariable = "/{(.*?)}/";
 
         if(preg_match_all($patternVariable, $routes, $matches)){
-
-            $routes = preg_replace($patternVariable, "(.*?)", $routes);
+            
+            $routes = preg_replace($patternVariable,"(.*?)",$routes);
 
             $params["variables"] = $matches[1];
 
@@ -135,12 +156,12 @@ class Router{
      * @param array $params
      */
 
-     public function put($routes, $params = [])
-     {
- 
-         return $this->addRoutes('PUT', $routes, $params);
- 
-     }
+    public function put($routes, $params = [])
+    {
+
+        return $this->addRoutes('PUT', $routes, $params);
+
+    }
 
       /**
      * Método responsável por definir uma rota de DELETE
@@ -161,12 +182,12 @@ class Router{
      * @param array $params
      */
 
-     public function get($routes, $params = [])
-     {
- 
-         return $this->addRoutes('GET', $routes, $params);
- 
-     }
+    public function get($routes, $params = [])
+    {
+
+        return $this->addRoutes('GET', $routes, $params);
+
+    }
 
     /**
      * Método responsável por retornar a URI sem o prefixo
@@ -180,10 +201,10 @@ class Router{
         $uri = $this->request->getUri();
 
         // Fatia a uri com o prefixo
-        $xUri = strlen($this->prefix) ? explode($this->prefix, $uri) : [$uri];
+        $xUri = strlen($this->prefix) ? explode($this->prefix,$uri) : [$uri];
 
         // Retorna a URI sem prefixo
-        return end($xUri);
+        return rtrim(end($xUri),"/");
 
     }
 
@@ -233,7 +254,7 @@ class Router{
         }
         
         // Url não encontrada
-         throw new Exception("Url não encontrada", 404);
+        throw new Exception("Url não encontrada", 404);
 
     }
 
@@ -277,8 +298,32 @@ class Router{
 
         }catch(Exception $e){
 
-            return new Response($e->getCode(), $e->getMessage());
+            return new Response($e->getCode(), $this->getErrorMessage($e->getMessage()), $this->contentType);
 
+        }
+
+    }
+
+    /**
+     * Método responsável por a mensagem de erro de acordo com o contentType
+     * @param string $message
+     * @return mixed
+     */
+
+    private function getErrorMessage($message)
+    {
+
+        switch($this->contentType){
+            case "application/json":
+                return [
+
+                    "error" => $message
+
+                ];
+                break;
+            default:
+                return $message;
+                break;
         }
 
     }

@@ -26,7 +26,6 @@ $obRouter->get("/depoimentos", [
 
 ]);
 
-
 // Rota de depoimentos (INSERT)
 $obRouter->post("/depoimentos", [
     function ($request){

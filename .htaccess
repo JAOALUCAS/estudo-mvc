@@ -1,7 +1,6 @@
-# LIGA O REWRITE
+RewriteEngine On
 
-RewriteEngine On;
-
-# Regra do Rewrite tudo para o index
-RewriteCond %{REQUEST_FILENAME} ! - f
-RewriteRule ^{.*}$ . /index.php [QSA, NC]
+# Redirecionar tudo para o index.php se não for arquivo ou diretório existente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

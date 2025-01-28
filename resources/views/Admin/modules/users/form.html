@@ -2,9 +2,9 @@
 
 <hr>
 
-<a href="{{URL}}/admin/testimonies">
+<a href="{{URL}}/admin/users">
 
-    <button type="button" class="btn btn-warning">Cadastrar depoimento</button>
+    <button type="button" class="btn btn-warning">Cadastrar usuário</button>
 
 </a>
 
@@ -24,9 +24,17 @@
     
     <div class="form-group my-3">
 
-        <label for="depoimentoInput">Depoimento:</label>
-        
-        <textarea class="form-control" name="mensagem" rows="5" id="depoimentoInput" required>{{mensagem}}</textarea>
+        <label for="email">Email:</label>
+
+        <input type="email" name="email" id="emailInput" class="form-control" value="{{email}}" required>
+
+    </div>
+
+    <div class="form-group">
+
+        <label for="senhaInput">Senha:</label>
+
+        <input type="password" name="senha" id="senhaInput" class="form-control" required>
 
     </div>
 
